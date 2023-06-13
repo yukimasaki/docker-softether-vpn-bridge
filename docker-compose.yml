@@ -1,0 +1,6 @@
+version: "3"
+services:
+  se-vpn-bridge:
+    image: se-vpn-bridge:1.0
+    ports:
+      - "5055:5555"
