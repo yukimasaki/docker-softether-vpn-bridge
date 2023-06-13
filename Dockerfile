@@ -11,16 +11,15 @@ RUN cd /tmp \
     && cd vpnbridge \
     && make
 
-FROM alpine:latest
+FROM ubuntu:22.04
 
-COPY --from=prep /usr/local/vpnbridge/vpncmd /usr/local/vpnbridge/
-COPY --from=prep /usr/local/vpnbridge/vpnbridge /usr/local/vpnbridge/
+COPY --from=prep /tmp/vpnbridge/vpnbridge /tmp/vpnbridge/vpncmd /tmp/vpnbridge/hamcore.se2 /usr/local/vpnbridge/
 
 RUN cd /usr/local/vpnbridge \
     && chmod 600 * \
     && chmod 700 vpncmd \
     && chmod 700 vpnbridge
 
-EXPOSE 5555
+EXPOSE 5555/tcp
 
-CMD ["/usr/local/vpnbridge/vpnbridge", "execsvc"]
+# CMD ["/usr/local/vpnbridge/vpnbridge", "execsvc"]

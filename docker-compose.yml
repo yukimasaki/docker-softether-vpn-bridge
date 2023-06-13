@@ -1,6 +1,12 @@
 version: "3"
 services:
-  se-vpn-bridge:
-    image: se-vpn-bridge:1.0
+  sebridge:
+    container_name: sebridge
+    # image: sebridge:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "5055:5555"
+      - "5555:5555"
+    tty: true
+    stdin_open: true
