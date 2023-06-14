@@ -24,4 +24,4 @@ RUN apt-get update \
 
 EXPOSE 5555/tcp
 
-# CMD ["/usr/local/vpnbridge/vpnbridge", "execsvc"]
+CMD ["/usr/local/vpnbridge/vpnbridge", "execsvc"]
