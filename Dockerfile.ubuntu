@@ -16,6 +16,6 @@ RUN cd /tmp \
     && chmod 700 vpncmd \
     && chmod 700 vpnbridge
 
-EXPOSE 5555
+EXPOSE 5555/tcp
 
 CMD ["/usr/local/vpnbridge/vpnbridge", "execsvc"]
