@@ -15,7 +15,9 @@ FROM ubuntu:22.04
 
 COPY --from=prep /tmp/vpnbridge/vpnbridge /tmp/vpnbridge/vpncmd /tmp/vpnbridge/hamcore.se2 /usr/local/vpnbridge/
 
-RUN cd /usr/local/vpnbridge \
+RUN apt-get update \
+    && apt-get libssl libcrypto readline ncurses-l \
+    && cd /usr/local/vpnbridge \
     && chmod 600 * \
     && chmod 700 vpncmd \
     && chmod 700 vpnbridge
