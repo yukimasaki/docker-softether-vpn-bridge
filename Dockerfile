@@ -1,25 +1,31 @@
-FROM ubuntu:22.04 AS prep
+FROM alpine:latest AS prep
 
-ENV BUILD_VERSION=v4.41-9787-rtm-2023.03.14
+LABEL maintainer="Yuki Masaki <woodenhoe@gmail.com>"
+
+ENV BUILD_VERSION=v4.38-9760-rtm
 
 RUN cd /tmp \
-    && apt-get update \
-    && apt-get install -y wget gcc make \
-    && wget https://jp.softether-download.com/files/softether/${BUILD_VERSION}-tree/Linux/SoftEther_VPN_Bridge/64bit_-_Intel_x64_or_AMD64/softether-vpnbridge-${BUILD_VERSION}-linux-x64-64bit.tar.gz \
-    && tar -zxvf softether-vpnbridge-${BUILD_VERSION}-linux-x64-64bit.tar.gz \
-    && rm softether-vpnbridge-${BUILD_VERSION}-linux-x64-64bit.tar.gz \
-    && cd vpnbridge \
-    && make
+    && wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/download/${BUILD_VERSION}/softether-src-${BUILD_VERSION}.tar.gz \
+    && mkdir -p /usr/local/src \
+    && tar -x -C /usr/local/src/ -f softether-src-${BUILD_VERSION}.tar.gz \
+    && rm softether-src-${BUILD_VERSION}.tar.gz
 
-FROM ubuntu:22.04
+FROM alpine:latest AS build
 
-COPY --from=prep /tmp/vpnbridge/vpnbridge /tmp/vpnbridge/vpncmd /tmp/vpnbridge/hamcore.se2 /usr/local/vpnbridge/
+COPY --from=prep /usr/local/src /usr/local/src
 
-RUN cd /usr/local/vpnbridge \
-    && chmod 600 * \
-    && chmod 700 vpncmd \
-    && chmod 700 vpnbridge
+RUN apk add -U --no-cache build-base ncurses-dev openssl-dev readline-dev zip zlib-dev \
+    && cd /usr/local/src/* \
+    && ./configure \
+    && make \
+    && make install
+
+FROM alpine:latest
+
+COPY --from=build /usr/vpnbridge/ /usr/vpnbridge/
+
+RUN apk add -U --no-cache ncurses readline
 
 EXPOSE 5555/tcp
 
-CMD ["/usr/local/vpnbridge/vpnbridge", "execsvc"]
+CMD ["/usr/vpnbridge/vpnbridge", "execsvc"]
