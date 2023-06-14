@@ -1,12 +1,8 @@
 version: "3"
 services:
-  sebridge:
-    container_name: sebridge
-    # image: sebridge:1.0
-    build:
-      context: .
-      dockerfile: Dockerfile.alpine
+  app:
+    image: yukimasaki/softetherbridge
     ports:
-      - "5555:5555"
+      - "5555:5555/tcp"
     tty: true
     stdin_open: true
