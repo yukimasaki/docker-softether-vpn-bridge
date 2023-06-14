@@ -5,7 +5,7 @@ services:
     # image: sebridge:1.0
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.alpine
     ports:
       - "5555:5555"
     tty: true

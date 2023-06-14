@@ -1,4 +1,4 @@
 up:
 	docker compose up -d --build
-attach:
-	docker attach sebridge
+bash:
+	docker compose exec sebridge sh
